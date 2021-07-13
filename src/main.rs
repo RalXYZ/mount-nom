@@ -1,20 +1,9 @@
-use nom::{
-    IResult,
-    sequence::delimited,
-    // see the "streaming/complete" paragraph lower for an explanation of these submodules
-    character::complete::char,
-    bytes::complete::is_not
-};
-
 extern crate mount_nom;
 
-fn parens(input: &str) -> IResult<&str, &str> {
-    delimited(char('('), is_not(")"), char(')'))(input)
-}
-
 fn main() {
-    let a = parens("(asd))")
-        .unwrap().0;
+    let (_, mount) =
+        mount_nom::p("blk /mnt FAT32 options,a,b=c,d\\040e 0 0")
+            .unwrap();
 
-    println!("{}", a);
+    println!("{:?}", mount);
 }
